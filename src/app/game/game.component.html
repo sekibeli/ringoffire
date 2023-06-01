@@ -1,5 +1,11 @@
-<div class="field">
+<app-player
+  *ngFor="let p of game.players; let i = index;"
+  [ngStyle]="{ 'top.px': 100 + (i * 80) }"
+  [name]="p"
+  class="player-position">
+</app-player>
 
+<div class="field">
   <!-- original card stack (looks like there were many cards)-->
   <div class="card-stack">
     <img
@@ -33,3 +39,7 @@
     />
   </div>
 </div>
+
+<button mat-fab color="primary" (click)="openDialog()" class="btn-add">
+  <mat-icon>add</mat-icon>
+</button>
