@@ -1,17 +1,27 @@
 .player {
     display: flex;
     align-items: center;
-    background-color: #512a10;
+    background-color: rgba(166, 166, 166,0.8);
     height: 70px;
     width: 300px;
     border-top-left-radius: 50px;
     border-bottom-left-radius: 50px;
-    border: 2px solid white;
+    // border: 2px solid white;
     border-right: none;
 
     span {
-        color: white;
+        color: rgba(255, 255, 255, 0.223);
+       
         font-size: 28px;
         margin-left: 20px;
+    }
+}
+
+.player-active {
+    background-color: #512a10 !important;
+    border: 2px solid white;
+   
+    span {
+        color: white;
     }
 }
