@@ -1,0 +1,14 @@
+{
+  "targets": {
+    "jg-ringoffire": {
+      "hosting": {
+        "ringoffire": [
+          "jg-ringoffire"
+        ]
+      }
+    }
+  },
+  "projects": {
+    "default": "jg-ringoffire"
+  }
+}
