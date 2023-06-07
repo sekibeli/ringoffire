@@ -3,10 +3,11 @@ import { Game } from 'src/models/game';
 import { MatDialog, MAT_DIALOG_DATA, MatDialogRef, MatDialogModule } from '@angular/material/dialog';
 import { DialogAddPlayerComponent } from '../dialog-add-player/dialog-add-player.component';
 import { provideFirebaseApp, getApp, initializeApp } from '@angular/fire/app';
-import { getFirestore, onSnapshot, provideFirestore } from '@angular/fire/firestore';
+import { addDoc, getFirestore, onSnapshot, provideFirestore } from '@angular/fire/firestore';
 import { inject } from '@angular/core';
 import { Firestore, collectionData, collection } from '@angular/fire/firestore';
 import { query, getDocs, DocumentData, Query } from 'firebase/firestore';
+import { ActivatedRoute } from '@angular/router';
 
 
 
@@ -22,14 +23,16 @@ export class GameComponent implements OnInit {
   
   firestore: Firestore = inject(Firestore);
 
-  constructor(public dialog: MatDialog) {
+  constructor(private route: ActivatedRoute, public dialog: MatDialog) {
 
   }
 
   ngOnInit(): void {
 
     this.newGame();
-    const gamesCollection = collection(this.firestore, 'games');
+    this.route.params.subscribe((params)=> {
+      console.log(params['id']);
+        const gamesCollection = collection(this.firestore, 'games');
     const gamesQuery = query(gamesCollection);
     onSnapshot(gamesQuery, (snapshot) => {
       snapshot.forEach((game) => {
@@ -38,11 +41,15 @@ export class GameComponent implements OnInit {
     }, (error) => {
       console.error('Fehler beim Abonnieren der Spiele:', error);
     });
+    })
+  
   }
 
   newGame() {
     this.game = new Game();
-    console.log(this.game);
+    // console.log(this.game);
+    // const coll = collection(this.firestore, 'games')
+    // addDoc(coll , this.game.toJson());
   }
 
 
