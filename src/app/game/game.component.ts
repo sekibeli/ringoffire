@@ -3,7 +3,7 @@ import { Game } from 'src/models/game';
 import { MatDialog, MAT_DIALOG_DATA, MatDialogRef, MatDialogModule } from '@angular/material/dialog';
 import { DialogAddPlayerComponent } from '../dialog-add-player/dialog-add-player.component';
 import { provideFirebaseApp, getApp, initializeApp } from '@angular/fire/app';
-import { addDoc, doc, getFirestore, onSnapshot, provideFirestore } from '@angular/fire/firestore';
+import { addDoc, doc, getFirestore, onSnapshot, provideFirestore, updateDoc } from '@angular/fire/firestore';
 // import { inject } from '@angular/core';
 import { Firestore, collectionData, collection } from '@angular/fire/firestore';
 import { query, getDocs, DocumentData, Query } from 'firebase/firestore';
@@ -11,6 +11,7 @@ import { ActivatedRoute } from '@angular/router';
 import { GameService } from '../services/game.service';
 import { IGame } from '../models/game.model';
 import { Observable, of } from 'rxjs';
+import { update } from '@angular/fire/database';
 
 
 
@@ -25,6 +26,7 @@ export class GameComponent implements OnInit {
   currentCard: string;
   game !: Game;
   games$: Observable<any>;
+  gameId: string;
 
 
 
@@ -37,11 +39,11 @@ export class GameComponent implements OnInit {
   ngOnInit(): void {
 
     this.newGame();
-    const coll = collection(this.firestore, 'games');
-    this.games$ = collectionData(coll, { idField: 'id' });
-    this.games$.subscribe((game) => {
-      console.log('1Game update: ', game);
-    })
+    // const coll = collection(this.firestore, 'games');
+    // this.games$ = collectionData(coll, { idField: 'id' });
+    // this.games$.subscribe((game) => {
+    //   console.log('1Game update: ', game);
+    // })
 
 
 
@@ -49,11 +51,12 @@ export class GameComponent implements OnInit {
     const gamesCollection = collection(this.firestore, 'games');
     this.route.params.subscribe((params) => {
       console.log('params: ', params['id']);
+      this.gameId = params['id'];
       const gameRef = doc(this.firestore, 'games', params['id']);
 
       const startListening = onSnapshot(gameRef, (snappi: any) => {
         const game = snappi.data();
-        console.log('2Game update:', game);
+        console.log('Game update:', game);
 
         this.game.currentPlayer = game.currentPlayer;
         this.game.playedCards = game.playedCards;
@@ -82,7 +85,7 @@ export class GameComponent implements OnInit {
 
   newGame() {
     this.game = new Game();
-    console.log(this.game);
+    // console.log(this.game);
 
     // const coll = collection(this.firestore, 'games')
     // addDoc(coll, this.game.toJson());
@@ -109,19 +112,31 @@ export class GameComponent implements OnInit {
   openDialog(): void {
     const dialogRef = this.dialog.open(DialogAddPlayerComponent);
     this.gameService.getGame();
-    console.log(this.game, 'ID: ', this.game.id);
+    console.log(this.game, 'ID: ', this.gameId);
     dialogRef.afterClosed().subscribe(name => {
       if (name && name.length > 0) {
         this.game.players.push(name);
+        this.saveGame();
         // console.log('GameComp/Player: ', this.game.players);
         // console.log('GameComp: ',this.game);
-        this.gameService.updateGame();
+        
       }
     });
   }
 
-}
-function valueChanges(gamesQuery: Query<DocumentData>) {
-  throw new Error('Function not implemented.');
-}
+  saveGame() {
+    // const gamesCollection = collection(this.firestore, 'games');
+    const gameColl = doc(this.firestore, 'games', this.gameId);
+    updateDoc(gameColl, this.game.toJson());
+    // const gameColl = doc(this.firestore, 'games', this.gameId);
+   
+    }
+   
+  }
+
+
+
+// function valueChanges(gamesQuery: Query<DocumentData>) {
+//   throw new Error('Function not implemented.');
+// }
 

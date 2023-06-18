@@ -25,7 +25,7 @@ export class StartScreenComponent implements OnInit {
       .then((gameInfo: any) => {
         this.router.navigate(['/game', gameInfo.id]);
         this.gameService.game.id = gameInfo.id;
-        console.log(this.gameService.game.id);
+        console.log('Game ID: ', this.gameService.game.id);
       });
   }
 }
