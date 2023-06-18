@@ -1,5 +1,8 @@
 import { Component, OnInit } from '@angular/core';
+import { Firestore, addDoc, collection } from '@angular/fire/firestore';
 import { Router } from '@angular/router';
+import { Game } from 'src/models/game';
+import { GameService } from '../services/game.service';
 
 @Component({
   selector: 'app-start-screen',
@@ -9,14 +12,21 @@ import { Router } from '@angular/router';
 export class StartScreenComponent implements OnInit {
 
 
-  constructor(private router: Router){}
- 
- 
-  ngOnInit(): void{}
+  constructor(private router: Router, private firestore: Firestore, private gameService: GameService) { }
 
-  newGame(){
-    // start game
 
-    this.router.navigateByUrl('/game');
+  ngOnInit(): void { }
+
+
+  newGame() {
+    let game = new Game();
+    const gameRef = collection(this.firestore, 'games');
+    addDoc(gameRef, this.gameService.toJson())
+      .then((gameInfo: any) => {
+        this.router.navigate(['/game', gameInfo.id]);
+        this.gameService.game.id = gameInfo.id;
+        console.log(this.gameService.game.id);
+      });
   }
 }
+

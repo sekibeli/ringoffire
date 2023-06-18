@@ -3,11 +3,15 @@ import { Game } from 'src/models/game';
 import { MatDialog, MAT_DIALOG_DATA, MatDialogRef, MatDialogModule } from '@angular/material/dialog';
 import { DialogAddPlayerComponent } from '../dialog-add-player/dialog-add-player.component';
 import { provideFirebaseApp, getApp, initializeApp } from '@angular/fire/app';
-import { addDoc, getFirestore, onSnapshot, provideFirestore } from '@angular/fire/firestore';
-import { inject } from '@angular/core';
+import { addDoc, doc, getFirestore, onSnapshot, provideFirestore } from '@angular/fire/firestore';
+// import { inject } from '@angular/core';
 import { Firestore, collectionData, collection } from '@angular/fire/firestore';
 import { query, getDocs, DocumentData, Query } from 'firebase/firestore';
 import { ActivatedRoute } from '@angular/router';
+import { GameService } from '../services/game.service';
+import { IGame } from '../models/game.model';
+import { Observable, of } from 'rxjs';
+
 
 
 
@@ -20,36 +24,68 @@ export class GameComponent implements OnInit {
   pickCardAnimation = false;
   currentCard: string;
   game !: Game;
-  
-  firestore: Firestore = inject(Firestore);
+  games$: Observable<any>;
 
-  constructor(private route: ActivatedRoute, public dialog: MatDialog) {
 
+
+  constructor(private firestore: Firestore,
+    private route: ActivatedRoute,
+    public dialog: MatDialog,
+    private gameService: GameService) {
   }
 
   ngOnInit(): void {
 
     this.newGame();
-    this.route.params.subscribe((params)=> {
-      console.log(params['id']);
-        const gamesCollection = collection(this.firestore, 'games');
-    const gamesQuery = query(gamesCollection);
-    onSnapshot(gamesQuery, (snapshot) => {
-      snapshot.forEach((game) => {
-        console.log('Game update', game.data());
-      });
-    }, (error) => {
-      console.error('Fehler beim Abonnieren der Spiele:', error);
-    });
+    const coll = collection(this.firestore, 'games');
+    this.games$ = collectionData(coll, { idField: 'id' });
+    this.games$.subscribe((game) => {
+      console.log('1Game update: ', game);
     })
-  
+
+
+
+
+    const gamesCollection = collection(this.firestore, 'games');
+    this.route.params.subscribe((params) => {
+      console.log('params: ', params['id']);
+      const gameRef = doc(this.firestore, 'games', params['id']);
+
+      const startListening = onSnapshot(gameRef, (snappi: any) => {
+        const game = snappi.data();
+        console.log('2Game update:', game);
+
+        this.game.currentPlayer = game.currentPlayer;
+        this.game.playedCards = game.playedCards;
+        this.game.players = game.players;
+        this.game.stack = game.stack;
+        console.log('Players:', game.players);
+      });
+
+
+    })
+
   }
+
+  // const gamesCollection = collection(this.firestore, 'games');
+  // const gamesQuery = query(gamesCollection);
+  // onSnapshot(gamesQuery, (snapshot) => {
+  //   snapshot.forEach((game) => {
+  //     console.log('Game update', game.data());
+  //   });
+  // }, (error) => {
+  //   console.error('Fehler beim Abonnieren der Spiele:', error);
+  // });
+
+
+
 
   newGame() {
     this.game = new Game();
-    // console.log(this.game);
+    console.log(this.game);
+
     // const coll = collection(this.firestore, 'games')
-    // addDoc(coll , this.game.toJson());
+    // addDoc(coll, this.game.toJson());
   }
 
 
@@ -72,10 +108,14 @@ export class GameComponent implements OnInit {
 
   openDialog(): void {
     const dialogRef = this.dialog.open(DialogAddPlayerComponent);
-
+    this.gameService.getGame();
+    console.log(this.game, 'ID: ', this.game.id);
     dialogRef.afterClosed().subscribe(name => {
       if (name && name.length > 0) {
         this.game.players.push(name);
+        // console.log('GameComp/Player: ', this.game.players);
+        // console.log('GameComp: ',this.game);
+        this.gameService.updateGame();
       }
     });
   }
