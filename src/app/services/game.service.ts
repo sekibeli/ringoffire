@@ -7,6 +7,8 @@ import { Observable } from 'rxjs';
   providedIn: 'root'
 })
 export class GameService {
+  public pickCardAnimation = false;
+  public currentCard: string = '';
   public game: IGame = {
     players: [],
     stack: [],
@@ -30,7 +32,9 @@ export class GameService {
       players: this.game.players,
       stack: this.game.stack,
       playedCards: this.game.playedCards,
-      currentPlayer: this.game.currentPlayer
+      currentPlayer: this.game.currentPlayer,
+      pickCardAnimation: this.pickCardAnimation,
+     currentCard: this.currentCard
     }
 
   }
@@ -70,7 +74,9 @@ export class GameService {
       currentPlayer: this.game.currentPlayer,
       playedCards: this.game.playedCards,
       players: this.game.players,
-      stack: this.game.stack
+      stack: this.game.stack,
+      pickCardAnimation: this.pickCardAnimation
+     
     }
     return setDoc(gameColl, dataGame)
   }
