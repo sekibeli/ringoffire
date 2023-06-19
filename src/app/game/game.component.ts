@@ -64,47 +64,28 @@ export class GameComponent implements OnInit {
         this.game.stack = game.stack;
         console.log('Players:', game.players);
       });
-
-
     })
 
   }
 
-  // const gamesCollection = collection(this.firestore, 'games');
-  // const gamesQuery = query(gamesCollection);
-  // onSnapshot(gamesQuery, (snapshot) => {
-  //   snapshot.forEach((game) => {
-  //     console.log('Game update', game.data());
-  //   });
-  // }, (error) => {
-  //   console.error('Fehler beim Abonnieren der Spiele:', error);
-  // });
-
-
-
-
   newGame() {
     this.game = new Game();
-    // console.log(this.game);
-
-    // const coll = collection(this.firestore, 'games')
-    // addDoc(coll, this.game.toJson());
-  }
+     }
 
 
   takeCard() {
 
     if (!this.pickCardAnimation) {
       this.currentCard = this.game.stack.pop();
-
       this.pickCardAnimation = true;
 
       this.game.currentPlayer++;
       this.game.currentPlayer = this.game.currentPlayer % this.game.players.length;
-
+      this.saveGame();
       setTimeout(() => {
         this.game.playedCards.push(this.currentCard);
         this.pickCardAnimation = false;
+        this.saveGame();
       }, 1000)
     }
   }
@@ -117,26 +98,15 @@ export class GameComponent implements OnInit {
       if (name && name.length > 0) {
         this.game.players.push(name);
         this.saveGame();
-        // console.log('GameComp/Player: ', this.game.players);
-        // console.log('GameComp: ',this.game);
-        
-      }
+           }
     });
   }
 
   saveGame() {
-    // const gamesCollection = collection(this.firestore, 'games');
     const gameColl = doc(this.firestore, 'games', this.gameId);
     updateDoc(gameColl, this.game.toJson());
-    // const gameColl = doc(this.firestore, 'games', this.gameId);
-   
-    }
-   
   }
+}
 
 
-
-// function valueChanges(gamesQuery: Query<DocumentData>) {
-//   throw new Error('Function not implemented.');
-// }
 
