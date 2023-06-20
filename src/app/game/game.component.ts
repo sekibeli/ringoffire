@@ -2,16 +2,14 @@ import { Component, OnInit } from '@angular/core';
 import { Game } from 'src/models/game';
 import { MatDialog, MAT_DIALOG_DATA, MatDialogRef, MatDialogModule } from '@angular/material/dialog';
 import { DialogAddPlayerComponent } from '../dialog-add-player/dialog-add-player.component';
-import { provideFirebaseApp, getApp, initializeApp } from '@angular/fire/app';
+// import { provideFirebaseApp, getApp, initializeApp } from '@angular/fire/app';
 import { addDoc, doc, getFirestore, onSnapshot, provideFirestore, updateDoc } from '@angular/fire/firestore';
 // import { inject } from '@angular/core';
 import { Firestore, collectionData, collection } from '@angular/fire/firestore';
-import { query, getDocs, DocumentData, Query } from 'firebase/firestore';
+// import { query, getDocs, DocumentData, Query } from 'firebase/firestore';
 import { ActivatedRoute } from '@angular/router';
-import { GameService } from '../services/game.service';
-import { IGame } from '../models/game.model';
-import { Observable, of } from 'rxjs';
-import { update } from '@angular/fire/database';
+// import { Observable, of } from 'rxjs';
+// import { update } from '@angular/fire/database';
 
 
 
@@ -22,9 +20,9 @@ import { update } from '@angular/fire/database';
   styleUrls: ['./game.component.scss']
 })
 export class GameComponent implements OnInit {
- 
-  game !: Game;
-  games$: Observable<any>;
+
+  game : Game;
+  // games$: Observable<any>;
   gameId: string;
 
 
@@ -32,24 +30,16 @@ export class GameComponent implements OnInit {
   constructor(private firestore: Firestore,
     private route: ActivatedRoute,
     public dialog: MatDialog,
-    private gameService: GameService) {
+  ) {
+    console.log('constructor game components');
   }
 
   ngOnInit(): void {
-
     this.newGame();
-    // const coll = collection(this.firestore, 'games');
-    // this.games$ = collectionData(coll, { idField: 'id' });
-    // this.games$.subscribe((game) => {
-    //   console.log('1Game update: ', game);
-    // })
-
-
-
 
     const gamesCollection = collection(this.firestore, 'games');
     this.route.params.subscribe((params) => {
-      console.log('params: ', params['id']);
+      console.log('ngOnInit Game components params: ', params['id']);
       this.gameId = params['id'];
       const gameRef = doc(this.firestore, 'games', params['id']);
 
@@ -63,7 +53,6 @@ export class GameComponent implements OnInit {
         this.game.stack = game.stack;
         this.game.pickCardAnimation = game.pickCardAnimation;
         this.game.currentCard = game.currentCard;
-        // console.log('Players:', game.players);
       });
     })
 
@@ -71,7 +60,7 @@ export class GameComponent implements OnInit {
 
   newGame() {
     this.game = new Game();
-     }
+  }
 
 
   takeCard() {
@@ -93,13 +82,12 @@ export class GameComponent implements OnInit {
 
   openDialog(): void {
     const dialogRef = this.dialog.open(DialogAddPlayerComponent);
-    this.gameService.getGame();
-    console.log(this.game, 'ID: ', this.gameId);
+    console.log(this.game);
     dialogRef.afterClosed().subscribe(name => {
       if (name && name.length > 0) {
         this.game.players.push(name);
         this.saveGame();
-           }
+      }
     });
   }
 

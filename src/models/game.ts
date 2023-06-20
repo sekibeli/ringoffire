@@ -8,6 +8,7 @@ export class Game {
     public currentCard: string = '';
 
     constructor() {
+        console.log('constructor game');
         for (let i = 1; i < 14; i++) {
             this.stack.push('ace_' + i);
             this.stack.push('clubs_' + i);
@@ -35,7 +36,7 @@ export class Game {
 
 function shuffle(array) {
     let currentIndex = array.length, randomIndex;
-
+    
     // While there remain elements to shuffle.
     while (currentIndex != 0) {
 
