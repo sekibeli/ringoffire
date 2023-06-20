@@ -22,7 +22,7 @@ display: flex;
 justify-content: center;
 
 img {
-width: 25vw;
+width: 30vw;
 height: auto;
 cursor: pointer;
 
@@ -32,3 +32,16 @@ cursor: pointer;
 }
 }
 }
+
+@media (max-width: 720px){
+    .start-screen {
+        overflow: hidden;
+    }
+    .start-screen-box {
+     
+        img {
+            width: 300px;
+        }
+    }
+}
+

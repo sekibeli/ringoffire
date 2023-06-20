@@ -17,7 +17,7 @@ export class GameInfoComponent implements OnInit, OnChanges {
     { title: 'Mate', description: 'Pick a mate. Your mate must always drink when you drink and the other way around.' },
     { title: 'Thumbmaster', description: 'Hör sofort auf zu trinken und schicke alle nach Hause!' },
     { title: 'Men', description: 'All men drink.' },
-    { title: 'Quizmaster', description: 'Jedes Glas bedeutet eine Stunde training auf dem Kickr-Bike' },
+    { title: 'Quizmaster', description: 'Jedes Glas bedeutet eine Stunde Training auf dem Kickr-Bike' },
     { title: 'Never have i ever...', description: 'Say something you nnever did. Everyone who did it has to drink.' },
     { title: 'Rule', description: 'Make a rule. Everyone needs to drink when he breaks the rule.' },
   ];

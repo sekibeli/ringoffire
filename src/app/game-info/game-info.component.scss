@@ -1,0 +1,12 @@
+.mat-mdc-card-title, .mat-mdc-card-subtitle {
+    margin-left: 16px;
+    margin-top: 10px;
+}
+
+@media (max-width: 930px) {
+    .mdc-card {
+        min-height: 120px;
+        border-radius: 0;
+    }
+}
+

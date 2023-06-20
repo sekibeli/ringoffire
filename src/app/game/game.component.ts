@@ -8,6 +8,7 @@ import { addDoc, doc, getFirestore, onSnapshot, provideFirestore, updateDoc } fr
 import { Firestore, collectionData, collection } from '@angular/fire/firestore';
 // import { query, getDocs, DocumentData, Query } from 'firebase/firestore';
 import { ActivatedRoute } from '@angular/router';
+import { EditPlayerComponent } from '../edit-player/edit-player.component';
 // import { Observable, of } from 'rxjs';
 // import { update } from '@angular/fire/database';
 
@@ -94,6 +95,14 @@ export class GameComponent implements OnInit {
   saveGame() {
     const gameColl = doc(this.firestore, 'games', this.gameId);
     updateDoc(gameColl, this.game.toJson());
+  }
+
+  editPlayer(playerId: number){
+    console.log('edit Player', playerId);
+    const dialogRef = this.dialog.open(EditPlayerComponent);
+    dialogRef.afterClosed().subscribe((change: string) => {
+      console.log('changes received', change);
+    });
   }
 }
 

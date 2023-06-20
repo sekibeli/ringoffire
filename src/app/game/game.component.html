@@ -1,11 +1,19 @@
 <app-player
-  *ngFor="let p of game.players; let i = index;"
-  [ngStyle]="{ 'top.px': 100 + (i * 80) }"
+(click) = "editPlayer(i)"
+  *ngFor="let p of game.players; let i = index"
+  [ngStyle]="{ 'top.px': 100 + i * 80 }"
   [playerActive]="i == game.currentPlayer"
   [name]="p"
-  class="player-position">
+  class="player-position hide-mobile"
+>
 </app-player>
 
+<div class="scroll-container hide-desktop">
+<app-player-mobile (click) = "editPlayer(i)" *ngFor="let p of game.players; let i = index"
+
+[playerActive]="i == game.currentPlayer"
+[name]="p"></app-player-mobile>
+</div>
 <div class="field">
   <!-- original card stack (looks like there were many cards)-->
   <div class="card-stack">
