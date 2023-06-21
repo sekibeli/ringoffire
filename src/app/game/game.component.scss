@@ -81,6 +81,19 @@ app-player, app-player-mobile {
     }
 }
 
+.gameOver {
+    display: flex;
+    justify-content: center;
+    img {
+        width: 400px;
+
+    }
+}
+
+.preloadImage {
+    opacity:  0;
+    z-index: -9999999;
+}
 @media (max-width: 930px) {
 
     .scroll-container {
@@ -110,6 +123,12 @@ app-player, app-player-mobile {
         transform: scale(1.1) translateX(120px) translateY(-190px) rotate(-10deg);
     }
 
+    .pick-card {
+
+        animation: pic-card-animation 1s ease-in-out;
+        transform: scale(1.1) translateX(120px) translateY(-190px) rotate(-10deg);
+    }
+
     @keyframes pic-card-animation {
         0% {
             transform: scale(1);
@@ -127,10 +146,6 @@ app-player, app-player-mobile {
             transform: scale(1.1) translateX(120px) translateY(-190px) rotate(-10deg);
         }
     }
-    .pick-card {
-
-        animation: pic-card-animation 1s ease-in-out;
-        transform: scale(1.1) translateX(120px) translateY(-190px) rotate(-10deg);
-    }
+   
   
 }

@@ -3,10 +3,13 @@
   <p>Please enter the name of the player.</p>
   <mat-form-field>
     <mat-label>Name</mat-label>
-    <input matInput [(ngModel)]="name">
+    <input matInput [(ngModel)]="name" name=""name #nameInput="ngModel" maxlength="9" required>
+    <mat-error *ngIf="nameInput.invalid && (nameInput.dirty || nameInput.touched)">Der Name darf maximal 9 Zeichen haben.</mat-error>
   </mat-form-field>
 </div>
 <div mat-dialog-actions>
   <button mat-button (click)="onNoClick()">Cancel</button>
   <button mat-button [disabled]="name.length == 0" [mat-dialog-close]="name" cdkFocusInitial>Save</button>
 </div>
+
+

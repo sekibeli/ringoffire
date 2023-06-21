@@ -21,7 +21,7 @@ import { EditPlayerComponent } from '../edit-player/edit-player.component';
   styleUrls: ['./game.component.scss']
 })
 export class GameComponent implements OnInit {
-
+  gameover = false;
   game : Game;
   // games$: Observable<any>;
   gameId: string;
@@ -51,9 +51,11 @@ export class GameComponent implements OnInit {
         this.game.currentPlayer = game.currentPlayer;
         this.game.playedCards = game.playedCards;
         this.game.players = game.players;
+        this.game.playerImages = game.playerImages;
         this.game.stack = game.stack;
         this.game.pickCardAnimation = game.pickCardAnimation;
         this.game.currentCard = game.currentCard;
+       
       });
     })
 
@@ -65,8 +67,14 @@ export class GameComponent implements OnInit {
 
 
   takeCard() {
+    if (this.game.stack.length == 0){
+      this.gameover = true;
+    }
+else if (this.game.players.length == 0){
+  this.openDialog();
+}
 
-    if (!this.game.pickCardAnimation) {
+    else if (!this.game.pickCardAnimation) {
       this.game.currentCard = this.game.stack.pop();
       this.game.pickCardAnimation = true;
 
@@ -87,6 +95,7 @@ export class GameComponent implements OnInit {
     dialogRef.afterClosed().subscribe(name => {
       if (name && name.length > 0) {
         this.game.players.push(name);
+        this.game.playerImages.push('male.png');
         this.saveGame();
       }
     });
@@ -99,9 +108,22 @@ export class GameComponent implements OnInit {
 
   editPlayer(playerId: number){
     console.log('edit Player', playerId);
+    
     const dialogRef = this.dialog.open(EditPlayerComponent);
     dialogRef.afterClosed().subscribe((change: string) => {
-      console.log('changes received', change);
+      if(change){
+        if(change == 'DELETE'){
+          this.game.players.splice(playerId,1)
+          this.game.playerImages.splice(playerId,1)
+        }
+        else {
+          console.log('changes received', change);
+          this.game.playerImages[playerId] = change;
+        }
+       
+      this.saveGame();
+      }
+      
     });
   }
 }

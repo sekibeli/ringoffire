@@ -1,26 +1,32 @@
 <app-player
 (click) = "editPlayer(i)"
   *ngFor="let p of game.players; let i = index"
-  [ngStyle]="{ 'top.px': 100 + i * 80 }"
+  [ngStyle]="{ 'top.px': 50 + i * 62 }"
   [playerActive]="i == game.currentPlayer"
+  [image]="game.playerImages[i]"
   [name]="p"
   class="player-position hide-mobile"
 >
 </app-player>
 
 <div class="scroll-container hide-desktop">
-<app-player-mobile (click) = "editPlayer(i)" *ngFor="let p of game.players; let i = index"
-
+<app-player-mobile (click) = "editPlayer(i)" 
+*ngFor="let p of game.players; let i = index"
 [playerActive]="i == game.currentPlayer"
+[image]="game.playerImages[i]"
 [name]="p"></app-player-mobile>
 </div>
-<div class="field">
+<div *ngIf="gameover" class="gameOver">
+  <img src="./assets/img/gameover.svg" alt="">
+</div>
+
+<div *ngIf="!gameover" class="field">
   <!-- original card stack (looks like there were many cards)-->
   <div class="card-stack">
     <img
       *ngFor="let c of [0, 1, 2, 3]; let i = index"
       [ngStyle]="{ 'right.px': i * 5 }"
-      src="assets/img/cards/card_cover.png"
+      src="./assets/img/cards/card_cover.png"
     />
 
     <!-- Top card back side to hover -->
@@ -28,14 +34,14 @@
       (click)="takeCard()"
       class="top-card"
       style="right: 25px"
-      src="assets/img/cards/card_cover.png"
+      src="./assets/img/cards/card_cover.png"
     />
 
     <!-- stack for played cards -->
     <img
       *ngFor="let card of game.playedCards"
       class="played-card"
-      src="assets/img/cards/{{ card }}.png"
+      src="./assets/img/cards/{{ card }}.png"
     />
 
     <!-- Current card ( animation )-->
@@ -44,11 +50,13 @@
       *ngIf="game.pickCardAnimation"
       class="pick-card"
       style="right: 25px"
-      src="assets/img/cards/{{ game.currentCard }}.png"
+      src="./assets/img/cards/{{ game.currentCard }}.png"
     />
   </div>
 </div>
-<app-game-info [card]="game.currentCard" class="pin-bottom"></app-game-info>
-<button mat-fab color="primary" (click)="openDialog()" class="btn-add">
+<app-game-info *ngIf="!gameover" [card]="game.currentCard" class="pin-bottom"></app-game-info>
+<button *ngIf="!gameover" mat-fab color="primary" (click)="openDialog()" class="btn-add">
   <mat-icon>add</mat-icon>
 </button>
+
+<img class="preloadImage" src="./assets/img/cards/{{ game.stack[game.stack.length -1] }}.png">
