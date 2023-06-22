@@ -120,13 +120,13 @@ app-player, app-player-mobile {
 
     .played-card {
         right: 25px;
-        transform: scale(1.1) translateX(120px) translateY(-190px) rotate(-10deg);
+        transform: scale(1.1) translateX(130px) translateY(-200px) rotate(-10deg);
     }
 
     .pick-card {
 
         animation: pic-card-animation 1s ease-in-out;
-        transform: scale(1.1) translateX(120px) translateY(-190px) rotate(-10deg);
+        transform: scale(1.1) translateX(130px) translateY(-200px) rotate(-10deg);
     }
 
     @keyframes pic-card-animation {
@@ -143,7 +143,7 @@ app-player, app-player-mobile {
         }
     
         100% {
-            transform: scale(1.1) translateX(120px) translateY(-190px) rotate(-10deg);
+            transform: scale(1.1) translateX(130px) translateY(-200px) rotate(-10deg);
         }
     }
    

@@ -2,15 +2,11 @@ import { Component, OnInit } from '@angular/core';
 import { Game } from 'src/models/game';
 import { MatDialog, MAT_DIALOG_DATA, MatDialogRef, MatDialogModule } from '@angular/material/dialog';
 import { DialogAddPlayerComponent } from '../dialog-add-player/dialog-add-player.component';
-// import { provideFirebaseApp, getApp, initializeApp } from '@angular/fire/app';
 import { addDoc, doc, getFirestore, onSnapshot, provideFirestore, updateDoc } from '@angular/fire/firestore';
-// import { inject } from '@angular/core';
 import { Firestore, collectionData, collection } from '@angular/fire/firestore';
-// import { query, getDocs, DocumentData, Query } from 'firebase/firestore';
 import { ActivatedRoute } from '@angular/router';
 import { EditPlayerComponent } from '../edit-player/edit-player.component';
-// import { Observable, of } from 'rxjs';
-// import { update } from '@angular/fire/database';
+
 
 
 
@@ -23,7 +19,6 @@ import { EditPlayerComponent } from '../edit-player/edit-player.component';
 export class GameComponent implements OnInit {
   gameover = false;
   game : Game;
-  // games$: Observable<any>;
   gameId: string;
 
 
@@ -71,7 +66,7 @@ export class GameComponent implements OnInit {
       this.gameover = true;
     }
 else if (this.game.players.length == 0){
-  this.openDialog();
+  this.openDialog(); 
 }
 
     else if (!this.game.pickCardAnimation) {
