@@ -65,7 +65,7 @@ export class GameComponent implements OnInit {
     if (this.game.stack.length == 0){
       this.gameover = true;
     }
-else if (this.game.players.length == 0){
+else if (this.game.players.length < 2){
   this.openDialog(); 
 }
 
