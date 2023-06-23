@@ -27,7 +27,7 @@ export class GameComponent implements OnInit {
     private route: ActivatedRoute,
     public dialog: MatDialog,
   ) {
-    console.log('constructor game components');
+    // console.log('constructor game components');
   }
 
   ngOnInit(): void {
@@ -35,13 +35,13 @@ export class GameComponent implements OnInit {
 
     const gamesCollection = collection(this.firestore, 'games');
     this.route.params.subscribe((params) => {
-      console.log('ngOnInit Game components params: ', params['id']);
+      // console.log('ngOnInit Game components params: ', params['id']);
       this.gameId = params['id'];
       const gameRef = doc(this.firestore, 'games', params['id']);
 
       const startListening = onSnapshot(gameRef, (snappi: any) => {
         const game = snappi.data();
-        console.log('Game update:', game);
+        // console.log('Game update:', game);
 
         this.game.currentPlayer = game.currentPlayer;
         this.game.playedCards = game.playedCards;
@@ -86,7 +86,7 @@ else if (this.game.players.length == 0){
 
   openDialog(): void {
     const dialogRef = this.dialog.open(DialogAddPlayerComponent);
-    console.log(this.game);
+    // console.log(this.game);
     dialogRef.afterClosed().subscribe(name => {
       if (name && name.length > 0) {
         this.game.players.push(name);
@@ -102,7 +102,7 @@ else if (this.game.players.length == 0){
   }
 
   editPlayer(playerId: number){
-    console.log('edit Player', playerId);
+    // console.log('edit Player', playerId);
     
     const dialogRef = this.dialog.open(EditPlayerComponent);
     dialogRef.afterClosed().subscribe((change: string) => {
@@ -112,7 +112,7 @@ else if (this.game.players.length == 0){
           this.game.playerImages.splice(playerId,1)
         }
         else {
-          console.log('changes received', change);
+          // console.log('changes received', change);
           this.game.playerImages[playerId] = change;
         }
        

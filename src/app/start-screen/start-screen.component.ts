@@ -25,7 +25,7 @@ game: Game;
       .then((gameInfo: any) => {
         this.router.navigate(['/game', gameInfo.id]);
         this.game.id = gameInfo.id;
-        console.log('Game ID: ', this.game.id);
+        // console.log('Game ID: ', this.game.id);
       });
   }
 }
