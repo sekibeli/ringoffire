@@ -18,6 +18,8 @@
 </div>
 <div *ngIf="gameover" class="gameOver">
   <img src="./assets/img/gameover.svg" alt="">
+  <button (click)="showStartScreen()"  mat-stroked-button color="primary">Lalaaalaaalaaa .... play again or not?</button>
+  <!-- <button (click)="showStartScreen()"  mat-stroked-button color="warn">I've enough, thanks!</button> -->
 </div>
 
 <div *ngIf="!gameover" class="field">

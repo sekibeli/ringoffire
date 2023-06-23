@@ -4,7 +4,7 @@ import { MatDialog, MAT_DIALOG_DATA, MatDialogRef, MatDialogModule } from '@angu
 import { DialogAddPlayerComponent } from '../dialog-add-player/dialog-add-player.component';
 import { addDoc, doc, getFirestore, onSnapshot, provideFirestore, updateDoc } from '@angular/fire/firestore';
 import { Firestore, collectionData, collection } from '@angular/fire/firestore';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { EditPlayerComponent } from '../edit-player/edit-player.component';
 
 
@@ -18,7 +18,7 @@ import { EditPlayerComponent } from '../edit-player/edit-player.component';
 })
 export class GameComponent implements OnInit {
   gameover = false;
-  game : Game;
+  game: Game;
   gameId: string;
 
 
@@ -26,6 +26,7 @@ export class GameComponent implements OnInit {
   constructor(private firestore: Firestore,
     private route: ActivatedRoute,
     public dialog: MatDialog,
+    private router: Router
   ) {
     // console.log('constructor game components');
   }
@@ -33,16 +34,15 @@ export class GameComponent implements OnInit {
   ngOnInit(): void {
     this.newGame();
 
-    const gamesCollection = collection(this.firestore, 'games');
+    // const gamesCollection = collection(this.firestore, 'games');
     this.route.params.subscribe((params) => {
       // console.log('ngOnInit Game components params: ', params['id']);
       this.gameId = params['id'];
       const gameRef = doc(this.firestore, 'games', params['id']);
 
-      const startListening = onSnapshot(gameRef, (snappi: any) => {
+      // const startListening = 
+      onSnapshot(gameRef, (snappi: any) => {
         const game = snappi.data();
-        // console.log('Game update:', game);
-
         this.game.currentPlayer = game.currentPlayer;
         this.game.playedCards = game.playedCards;
         this.game.players = game.players;
@@ -50,7 +50,7 @@ export class GameComponent implements OnInit {
         this.game.stack = game.stack;
         this.game.pickCardAnimation = game.pickCardAnimation;
         this.game.currentCard = game.currentCard;
-       
+
       });
     })
 
@@ -62,12 +62,12 @@ export class GameComponent implements OnInit {
 
 
   takeCard() {
-    if (this.game.stack.length == 0){
+    if (this.game.stack.length == 0) {
       this.gameover = true;
     }
-else if (this.game.players.length < 2){
-  this.openDialog(); 
-}
+    else if (this.game.players.length < 2) {
+      this.openDialog();
+    }
 
     else if (!this.game.pickCardAnimation) {
       this.game.currentCard = this.game.stack.pop();
@@ -101,26 +101,32 @@ else if (this.game.players.length < 2){
     updateDoc(gameColl, this.game.toJson());
   }
 
-  editPlayer(playerId: number){
+  editPlayer(playerId: number) {
     // console.log('edit Player', playerId);
-    
+
     const dialogRef = this.dialog.open(EditPlayerComponent);
     dialogRef.afterClosed().subscribe((change: string) => {
-      if(change){
-        if(change == 'DELETE'){
-          this.game.players.splice(playerId,1)
-          this.game.playerImages.splice(playerId,1)
+      if (change) {
+        if (change == 'DELETE') {
+          this.game.players.splice(playerId, 1)
+          this.game.playerImages.splice(playerId, 1)
         }
         else {
           // console.log('changes received', change);
           this.game.playerImages[playerId] = change;
         }
-       
-      this.saveGame();
+
+        this.saveGame();
       }
-      
+
     });
   }
+
+  showStartScreen(){
+    this.gameover = false;
+    this.router.navigate(['']);
+  }
+ 
 }
 
 

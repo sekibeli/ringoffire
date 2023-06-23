@@ -20,11 +20,12 @@ game: Game;
   newGame() {
     // let game = new Game;
     this.game = new Game;
-    const gameRef = collection(this.firestore, 'games');
-    addDoc(gameRef, this.game.toJson())
-      .then((gameInfo: any) => {
-        this.router.navigate(['/game', gameInfo.id]);
+    const gameRef = collection(this.firestore, 'games'); // Eine Verbindung zur Datenbank wird hergestellt und zeigt auf die Collection "games"
+    addDoc(gameRef, this.game.toJson()) // Ein neues Document wird erstellt/hinzugefügt
+      .then((gameInfo: any) => { // Bei erfolgreicher Erstellung ...
+        this.router.navigate(['/game', gameInfo.id]); // ... wird weitergeleitet auf das entsprechende Document
         this.game.id = gameInfo.id;
+        // console.log(gameInfo);
         // console.log('Game ID: ', this.game.id);
       });
   }
